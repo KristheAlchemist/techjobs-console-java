@@ -134,10 +134,10 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            for (String search : row.keySet()) {
-                String aValue = row.get(search);
+            for (String search : row.values()) {
+//                String aValue = row.get(search);
 
-                if (aValue.toUpperCase().contains(value.toUpperCase())) {
+                if (search.toUpperCase().contains(value.toUpperCase())) {
                     jobs.add(row);
                 }
             }

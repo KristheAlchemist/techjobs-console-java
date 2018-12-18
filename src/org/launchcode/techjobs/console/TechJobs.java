@@ -61,18 +61,18 @@ public class TechJobs {
 
                 System.out.println("\nSearch term: ");
                 String searchTerm = in.nextLine();
-                if (columnChoices.containsValue(searchTerm)) {
+//                if (columnChoices.containsValue(searchTerm)) {
                     if (searchField.equals("all")) {
                         printJobs(JobData.findByValue(searchTerm));
                     } else {
                         printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                     }
-                } else {
-                    System.out.println("Sorry. We couldn't find any results for '" + searchTerm + "'. \nPlease try again.");
+//                } else {
+//                    System.out.println("Sorry. We couldn't find any results for '" + searchTerm + "'. \nPlease try again.");
                 }
             }
         }
-    }
+//    }
 
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
@@ -116,12 +116,20 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        for (HashMap<String, String> job : someJobs) {
-            System.out.println("\n*****");
-            for (Map.Entry<String, String> entry : job.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
+        if (someJobs.isEmpty()) {
+            System.out.println("Sorry. We couldn't find any results. \nPlease try again.");
+        } else {
+            for (HashMap<String, String> job : someJobs) {
+
+
+                System.out.println("\n*****");
+                for (Map.Entry<String, String> entry : job.entrySet()) {
+                    System.out.println(entry.getKey() + ": " + entry.getValue());
+                }
+                System.out.println("*****");
+
             }
-            System.out.println("*****");
+
         }
 
 
