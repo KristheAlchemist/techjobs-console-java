@@ -1,9 +1,6 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -39,10 +36,14 @@ public class TechJobs {
                 String columnChoice = getUserSelection("List", columnChoices);
 
                 if (columnChoice.equals("all")) {
+
                     printJobs(JobData.findAll());
                 } else {
 
                     ArrayList<String> results = JobData.findAll(columnChoice);
+
+                    Collections.sort(results);
+
 
                     System.out.println("\n*** All " + columnChoices.get(columnChoice) + " Values ***");
 
@@ -52,7 +53,7 @@ public class TechJobs {
                     }
                 }
 
-            } else { // choice is "search"
+            } if (actionChoice.equals("search")) { // choice is "search"
 
                 // How does the user want to search (e.g. by skill or employer)
                 String searchField = getUserSelection("Search by:", columnChoices);
@@ -61,25 +62,22 @@ public class TechJobs {
 
                 System.out.println("\nSearch term: ");
                 String searchTerm = in.nextLine();
-//                if (columnChoices.containsValue(searchTerm)) {
-                    if (searchField.equals("all")) {
-                        printJobs(JobData.findByValue(searchTerm));
-                    } else {
-                        printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
-                    }
-//                } else {
-//                    System.out.println("Sorry. We couldn't find any results for '" + searchTerm + "'. \nPlease try again.");
+                if (searchField.equals("all")) {
+                    printJobs(JobData.findByValue(searchTerm));
+                } else {
+                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
             }
         }
-//    }
+    }
 
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
 
-        Integer choiceIdx;
+        Integer choiceIdx = 0;
         Boolean validChoice = false;
         String[] choiceKeys = new String[choices.size()];
+        String listen;
 
         // Put the choices in an ordered structure so we can
         // associate an integer with each one
@@ -98,14 +96,20 @@ public class TechJobs {
                 System.out.println("" + j + " - " + choices.get(choiceKeys[j]));
             }
 
-            choiceIdx = in.nextInt();
-            in.nextLine();
+            try {
+                choiceIdx = in.nextInt();
+                in.nextLine();
 
-            // Validate user's input
-            if (choiceIdx < 0 || choiceIdx >= choiceKeys.length) {
+
+                // Validate user's input
+                if (choiceIdx < 0 || choiceIdx >= choiceKeys.length) {
+                    System.out.println("Invalid choice. Try again.");
+                } else {
+                    validChoice = true;
+                }
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid choice. Try again.");
-            } else {
-                validChoice = true;
+                in.nextLine();
             }
 
         } while(!validChoice);
@@ -116,22 +120,25 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
+
+
         if (someJobs.isEmpty()) {
             System.out.println("Sorry. We couldn't find any results. \nPlease try again.");
         } else {
+            int count = 1;
             for (HashMap<String, String> job : someJobs) {
 
-
-                System.out.println("\n*****");
+                System.out.println("\n**" + count + "**");
                 for (Map.Entry<String, String> entry : job.entrySet()) {
                     System.out.println(entry.getKey() + ": " + entry.getValue());
                 }
                 System.out.println("*****");
 
+                count ++;
             }
 
         }
 
-
     }
+
 }
